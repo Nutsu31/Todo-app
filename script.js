@@ -16,7 +16,6 @@ function addTodo(text) {
 
   removeBtn.addEventListener("click", () => {
     removeBtn.parentElement.remove("li");
-    localStorage.removeItem();
     todos = [];
   });
 
@@ -38,11 +37,11 @@ form.addEventListener("submit", (e) => {
   addTodo(text);
   todos.push(text);
 
-  localStorage.setItem(text, JSON.stringify(todos));
+  localStorage.setItem("todos", JSON.stringify(todos));
 });
 
 // Load the tasks from local storage when the page loads
-const storedTasks = JSON.parse(localStorage.getItem(text));
+const storedTasks = JSON.parse(localStorage.getItem("todos"));
 if (storedTasks) {
   todos = storedTasks;
   todos.forEach((todo) => {
