@@ -1,8 +1,5 @@
-// Get references to the form, list, and buttons
 const form = document.querySelector("form");
 const list = document.querySelector("ul");
-// const clearBtn = document.querySelector("#clear-btn");
-// const completeBtn = document.querySelector("#complete-btn");
 
 // An array to store the todo items
 let todos = [];
@@ -34,8 +31,12 @@ form.addEventListener("submit", (e) => {
   input.value = "";
 
   // Add the todo item to the list and the array
-  addTodo(text);
-  todos.push(text);
+  if (input.value !== undefined) {
+    addTodo(text);
+    todos.push(text);
+  } else if (input.value === undefined) {
+    alert("Enter your list");
+  }
 
   localStorage.setItem("todos", JSON.stringify(todos));
 });
@@ -50,16 +51,33 @@ if (storedTasks) {
 }
 
 // activation navigatio buttons
+const input = document.getElementById("input");
+const button = document.getElementById("submit");
 
 const all = document.querySelector(".all");
 const active = document.querySelector(".active");
 const complete = document.querySelector(".complete");
 const lists = document.querySelectorAll("li");
+const clearBtn = document.querySelector("#deleteLocalStorage");
+
+clearBtn.addEventListener("click", () => {
+  todos = [];
+  localStorage.removeItem("todos");
+  list.innerHTML = "";
+});
+
+clearBtn.style.display = "none";
 
 active.addEventListener("click", () => {
+  clearBtn.style.display = "none";
+
+  input.style.display = "inline-block";
+  button.style.display = "inline-block";
+
   all.classList.remove("actived");
   complete.classList.remove("actived");
   active.classList.add("actived");
+
   lists.forEach((i) => {
     if (i.className == "completed") {
       i.style.display = "none";
@@ -68,10 +86,17 @@ active.addEventListener("click", () => {
     }
   });
 });
+
 complete.addEventListener("click", () => {
+  clearBtn.style.display = "flex";
+
   active.classList.remove("actived");
   all.classList.remove("actived");
   complete.classList.add("actived");
+
+  input.style.display = "none";
+  button.style.display = "none";
+
   lists.forEach((i) => {
     if (i.className == "completed") {
       i.style.display = "flex";
@@ -80,10 +105,17 @@ complete.addEventListener("click", () => {
     }
   });
 });
+
 all.addEventListener("click", () => {
+  clearBtn.style.display = "none";
+
+  input.style.display = "inline-block";
+  button.style.display = "inline-block";
+
   active.classList.remove("actived");
   all.classList.add("actived");
   complete.classList.remove("actived");
+
   lists.forEach((i) => {
     if (i) {
       i.style.display = "flex";
